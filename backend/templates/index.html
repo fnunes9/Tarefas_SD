@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section>
+    <h2>Tarefas</h2>
+    <ul>
+        {% for task in tasks %}
+        <li {% if task.is_past_due() %}class="past-due"{% endif %}>
+            <a href="{{ url_for('read', task_id=task.id) }}">
+                <h3>{{ task.title }}</h3>
+            </a>
+            <p>{{ task.description }}</p>
+            <p>Prazo: {{ task.deadline.strftime('%Y-%m-%d %H:%M') }}</p>
+            <form action="{{ url_for('delete', task_id=task.id) }}" method="post" onsubmit="return confirm('Tem certeza que deseja excluir esta tarefa?');">
+                <input type="hidden" name="_method" value="DELETE">
+                <button type="submit" class="delete-button">Excluir</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</section>
+<a href="{{ url_for('create') }}">Criar nova tarefa</a>
+{% endblock %}
